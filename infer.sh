@@ -1,0 +1,11 @@
+python infer.py \
+    --image_path ./assets/images/woman.png \
+    --audio_path ./assets/audios/woman.wav \
+    --prompt "A woman is talking." \
+    --max_num_frames 81 \
+    --image_size 512 \
+    --audio_scale 1.0 \
+    --prompt_cfg_scale 5.0 \
+    --audio_cfg_scale 5.0 \
+    --fps 23 \
+    --seed 1111

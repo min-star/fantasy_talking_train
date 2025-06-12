@@ -1,0 +1,15 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info
+models/**
+output/**
+data/**
+data1/**
+.vscode
+README.md
+README_zh.md
+train.py
