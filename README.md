@@ -66,21 +66,43 @@ file_name,text,audio
 000.mp4,"A girl wearing a mask faces the audience and gently places her hands on her chest",000.wav
 005.mp4,"A girl wearing a mask stands in the kitchen facing the audience and makes a heart shape with her hands",005.wav
 ```
-
-## 🧩 Community Works
-We ❤️ contributions from the open-source community! If your work has improved FantasyTalking, please inform us.
-Or you can directly e-mail [frank.jf@alibaba-inc.com](mailto://frank.jf@alibaba-inc.com). We are happy to reference your project for everyone's convenience.
-
-## 🔗Citation
-If you find this repository useful, please consider giving a star ⭐ and citation
+2. Train
+data to tensor.pt
 ```
-@article{wang2025fantasytalking,
-   title={FantasyTalking: Realistic Talking Portrait Generation via Coherent Motion Synthesis},
-   author={Wang, Mengchao and Wang, Qiang and Jiang, Fan and Fan, Yaqi and Zhang, Yunpeng and Qi, Yonggang and Zhao, Kun and Xu, Mu},
-   journal={arXiv preprint arXiv:2504.04842},
-   year={2025}
- }
+CUDA_VISIBLE_DEVICES=0 python ./fantasytalking_train.py \
+    --task data_process \
+    --dataset_path "data1/" \
+    --output_path "./models" \
+    --text_encoder_path "./models/Wan2.1-I2V-14B-720P/models_t5_umt5-xxl-enc-bf16.pth" \
+    --dit_path "models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00001-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00002-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00003-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00004-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00005-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00006-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00007-of-00007.safetensors" \
+    --image_encoder_path "models/Wan2.1-I2V-14B-720P/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth" \
+    --vae_path "./models/Wan2.1-I2V-14B-720P/Wan2.1_VAE.pth" \
+    --tiled \
+    --num_frames 81 \
+    --height 480 \
+    --width 832
 ```
-
-## Acknowledgments
-Thanks to [Wan2.1](https://github.com/Wan-Video/Wan2.1), [HunyuanVideo](https://github.com/Tencent/HunyuanVideo), and [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) for open-sourcing their models and code, which provided valuable references and support for this project. Their contributions to the open-source community are truly appreciated.
+single GPU
+```
+CUDA_VISIBLE_DEVICES=0 python ./fantasytalking_train.py \
+    --task data_process \
+    --dataset_path "data1/" \
+    --output_path "./models" \
+    --text_encoder_path "./models/Wan2.1-I2V-14B-720P/models_t5_umt5-xxl-enc-bf16.pth" \
+    --dit_path "models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00001-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00002-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00003-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00004-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00005-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00006-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00007-of-00007.safetensors" \
+    --image_encoder_path "models/Wan2.1-I2V-14B-720P/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth" \
+    --vae_path "./models/Wan2.1-I2V-14B-720P/Wan2.1_VAE.pth" \
+    --tiled \
+    --num_frames 81 \
+    --height 480 \
+    --width 832
+```
+multi GPU
+```
+CUDA_VISIBLE_DEVICES="0,1,2,3" python ./fantasytalking_train.py     --task train     --dataset_path data1/     --output_path ./models     --dit_path "models/Wan2.1-I2V-14B-
+720P/diffusion_pytorch_model-00001-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00002-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00003-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorc
+h_model-00004-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00005-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00006-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00007-of-0000
+7.safetensors"     --steps_per_epoch 500     --max_epochs 10     --learning_rate 1e-4     --accumulate_grad_batches 1     --use_gradient_checkpointing --use_gradient_checkpointing_offload --training_strategy "deepspeed_stage_2"
+```
+GPU 
+A100 usage ~65GB
