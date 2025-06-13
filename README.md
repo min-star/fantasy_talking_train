@@ -6,8 +6,8 @@
 Clone the repo:
 
 ```
-git clone [https://github.com/Fantasy-AMAP/fantasy-talking.git](https://github.com/min-star/fantasy_talking_train)
-cd fantasy-talking
+git clone https://github.com/Fantasy-AMAP/fantasy-talking.git
+cd fantasy_talking_train
 ```
 
 Install dependencies:
