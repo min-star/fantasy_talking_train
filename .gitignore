@@ -13,5 +13,4 @@ data1/**
 README_zh.md
 train.py
 demo_load.py
-.gitignore
 data2/**
