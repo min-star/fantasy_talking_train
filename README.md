@@ -105,4 +105,4 @@ h_model-00004-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_
 7.safetensors"     --steps_per_epoch 500     --max_epochs 10     --learning_rate 1e-4     --accumulate_grad_batches 1     --use_gradient_checkpointing --use_gradient_checkpointing_offload --training_strategy "deepspeed_stage_2"
 ```
 GPU 
-A100 usage ~65GB
+A100 usage: ~65GB
