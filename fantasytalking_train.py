@@ -127,7 +127,7 @@ class TextVideoDataset(torch.utils.data.Dataset):
             video, first_frame = video
             data = {"text": text, "video": video, "path": path, "first_frame": first_frame, "audio_path": auido_path}
         else:
-            data = {"text": text, "video": video, "path": path, "audio_fea": auido_path}
+            data = {"text": text, "video": video, "path": path, "audio_path": auido_path}
         return data
     
 
@@ -320,19 +320,20 @@ class LightningModelForTrain(pl.LightningModule):
     
 
     def on_save_checkpoint(self, checkpoint):
+        # checkpoint.clear()
+        # trainable_param_names = list(filter(lambda named_param: named_param[1].requires_grad, self.pipe.denoising_model().named_parameters())) + list(filter(lambda named_param: named_param[1].requires_grad, self.fantasytalking.proj_model.named_parameters()))
+        # trainable_param_names = set([named_param[0] for named_param in trainable_param_names])
+        # # state_dict = self.pipe.denoising_model().state_dict()
+        # state_dict = self.state_dict()
+
+        # new_state_dict = {'.'.join(name.split('.')[2:]): param for name, param in state_dict.items()} # 去掉前两个前缀
+
+        # lora_state_dict = {}
+        # for name, param in new_state_dict.items():
+        #     if name in trainable_param_names:
+        #         lora_state_dict[name] = param
+        # checkpoint.update(lora_state_dict)
         checkpoint.clear()
-        trainable_param_names = list(filter(lambda named_param: named_param[1].requires_grad, self.pipe.denoising_model().named_parameters())) + list(filter(lambda named_param: named_param[1].requires_grad, self.fantasytalking.proj_model.named_parameters()))
-        trainable_param_names = set([named_param[0] for named_param in trainable_param_names])
-        # state_dict = self.pipe.denoising_model().state_dict()
-        state_dict = self.state_dict()
-
-        new_state_dict = {'.'.join(name.split('.')[2:]): param for name, param in state_dict.items()} # 去掉前两个前缀
-
-        lora_state_dict = {}
-        for name, param in new_state_dict.items():
-            if name in trainable_param_names:
-                lora_state_dict[name] = param
-        checkpoint.update(lora_state_dict)
 
 
 
@@ -627,50 +628,7 @@ if __name__ == '__main__':
     elif args.task == "train":
         train(args)
 
-# torch.multiprocessing.set_start_method('spawn')
-# args = parse_args()
-# dataset = TextVideoDataset(
-#     args.dataset_path,
-#     os.path.join(args.dataset_path, "metadata.csv"),
-#     max_num_frames=args.num_frames,
-#     frame_interval=1,
-#     num_frames=args.num_frames,
-#     height=args.height,
-#     width=args.width,
-#     is_i2v=args.image_encoder_path is not None
-#     )
-# dataloader = torch.utils.data.DataLoader(
-#     dataset,
-#     shuffle=False,
-#     batch_size=1,
-#     num_workers=1
-# )
 
-# for batch in dataloader:
-#     text, video, path, audio_path = batch["text"][0], batch["video"], batch["path"][0], batch["audio_path"]
-#     print(text, video.shape, path, audio_path)
-
-
-# dataset = TextVideoDataset(
-#     base_path="./data1",
-#     metadata_path="/home/maintain/image_genarate_lab/msf/fantasy-talking-main/data1/metadata.csv",
-#     max_num_frames=81,
-#     frame_interval=1,
-#     num_frames=81,
-#     height=480,
-#     width=832,
-#     is_i2v=True
-# )
-
-# print(dataset[0])
-
-
-# LightningModelForTrain(
-#     dit_path="models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00001-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00002-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00003-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00004-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00005-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00006-of-00007.safetensors,models/Wan2.1-I2V-14B-720P/diffusion_pytorch_model-00007-of-00007.safetensors",
-#     learning_rate=1e-5,
-#     use_gradient_checkpointing=True,
-#     use_gradient_checkpointing_offload=False
-# ).to("cuda")
     
 
 
