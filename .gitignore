@@ -15,3 +15,4 @@ train.py
 demo_load.py
 data2/**
 .gitignore
+infer_practice.py

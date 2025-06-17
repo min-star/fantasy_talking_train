@@ -53,7 +53,7 @@ python infer.py  --image_path ./assets/images/woman.png --audio_path ./assets/au
 ### Train
 1. Prepare the Dataset
 ```
-data2/train
+data/train
 ├── 000.mp4
 ├── 000.wav
 ├── 005.mp4
