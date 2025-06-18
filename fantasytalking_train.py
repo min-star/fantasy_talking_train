@@ -320,20 +320,20 @@ class LightningModelForTrain(pl.LightningModule):
     
 
     def on_save_checkpoint(self, checkpoint):
-        # checkpoint.clear()
-        # trainable_param_names = list(filter(lambda named_param: named_param[1].requires_grad, self.pipe.denoising_model().named_parameters())) + list(filter(lambda named_param: named_param[1].requires_grad, self.fantasytalking.proj_model.named_parameters()))
-        # trainable_param_names = set([named_param[0] for named_param in trainable_param_names])
-        # # state_dict = self.pipe.denoising_model().state_dict()
-        # state_dict = self.state_dict()
-
-        # new_state_dict = {'.'.join(name.split('.')[2:]): param for name, param in state_dict.items()} # 去掉前两个前缀
-
-        # lora_state_dict = {}
-        # for name, param in new_state_dict.items():
-        #     if name in trainable_param_names:
-        #         lora_state_dict[name] = param
-        # checkpoint.update(lora_state_dict)
         checkpoint.clear()
+        trainable_param_names = list(filter(lambda named_param: named_param[1].requires_grad, self.pipe.denoising_model().named_parameters())) + list(filter(lambda named_param: named_param[1].requires_grad, self.fantasytalking.proj_model.named_parameters()))
+        trainable_param_names = set([named_param[0] for named_param in trainable_param_names])
+        # state_dict = self.pipe.denoising_model().state_dict()
+        state_dict = self.state_dict()
+
+        new_state_dict = {'.'.join(name.split('.')[2:]): param for name, param in state_dict.items()} # 去掉前两个前缀
+
+        lora_state_dict = {}
+        for name, param in new_state_dict.items():
+            if name in trainable_param_names:
+                lora_state_dict[name] = param
+        checkpoint.update(lora_state_dict)
+        
 
 
 
